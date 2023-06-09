@@ -1,0 +1,35 @@
+server:
+  port: 9090
+spring:
+  datasource:
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/electronic_store
+    password: Gemini#123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+    show-sql: true
+  # file config
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  security:
+    user:
+      name: vansh
+      password: Vanya@123
+# image path config
+user:
+  profile:
+    image:
+      path: images/users/
+category:
+  image:
+    path: images/category/
+product:
+  image:
+    path: images/category/
