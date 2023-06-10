@@ -1,6 +1,7 @@
 package com.shopping.electronic.store.config;
 
 import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -20,8 +21,9 @@ public class OpenAPIConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "PUT", "POST", "DELETE", "PATCH")
-            .allowedHeaders("*");
+                .allowedHeaders("*");
     }
+
     /**
      * Method to map root url to swagger url
      *
@@ -31,8 +33,10 @@ public class OpenAPIConfig implements WebMvcConfigurer {
     public void addViewControllers(final ViewControllerRegistry registry) {
         registry.addRedirectViewController("/", "/swagger-ui/index.html");
     }
+
     /**
      * Method to Support Octet Stream support to open api Multipart form dedicated api's
+     *
      * @return
      */
     @Bean

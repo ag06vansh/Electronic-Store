@@ -4,6 +4,7 @@ import com.shopping.electronic.store.dto.UserDto;
 import com.shopping.electronic.store.exception.ResourceNotFoundException;
 import com.shopping.electronic.store.model.User;
 import com.shopping.electronic.store.repository.UserRepository;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,19 +47,19 @@ public class UserServiceImp implements UserService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         List<User> userList = userRepository.findAll(pageable).toList();
         List<UserDto> userDtoList =
-            userList
-                .stream()
-                .map(
-                    user -> modelMapper.map(user, UserDto.class)
-                )
-                .collect(Collectors.toList());
+                userList
+                        .stream()
+                        .map(
+                                user -> modelMapper.map(user, UserDto.class)
+                        )
+                        .collect(Collectors.toList());
         return userDtoList;
     }
 
     @Override
     public UserDto getUserById(String userId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found with given id."));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with given id."));
         return modelMapper.map(user, UserDto.class);
     }
 
@@ -71,19 +73,19 @@ public class UserServiceImp implements UserService {
     public List<UserDto> searchUser(String keyword) {
         List<User> userList = userRepository.findByNameContaining(keyword);
         List<UserDto> userDtoList =
-            userList
-                .stream()
-                .map(
-                    user -> modelMapper.map(user, UserDto.class)
-                )
-                .collect(Collectors.toList());
+                userList
+                        .stream()
+                        .map(
+                                user -> modelMapper.map(user, UserDto.class)
+                        )
+                        .collect(Collectors.toList());
         return userDtoList;
     }
 
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found with given id."));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with given id."));
         user.setAbout(userDto.getAbout());
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
@@ -97,7 +99,7 @@ public class UserServiceImp implements UserService {
     @Override
     public String deleteUser(String userId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found with given id."));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with given id."));
 
         String fullImagePath = imagePath + user.getImageName();
         try {

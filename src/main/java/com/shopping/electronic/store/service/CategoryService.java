@@ -1,6 +1,7 @@
 package com.shopping.electronic.store.service;
 
 import com.shopping.electronic.store.dto.CategoryDto;
+
 import java.util.List;
 
 public interface CategoryService {

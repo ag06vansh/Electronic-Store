@@ -7,6 +7,7 @@ import com.shopping.electronic.store.model.Category;
 import com.shopping.electronic.store.model.Product;
 import com.shopping.electronic.store.repository.CategoryRepository;
 import com.shopping.electronic.store.repository.ProductRepository;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +51,7 @@ public class ProductServiceImp implements ProductService {
     @Override
     public ProductDto updateProduct(String productId, ProductDto productDto) {
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new ResourceNotFoundException("Product not found !!!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found !!!"));
         product.setDescription(productDto.getDescription());
         product.setTitle(productDto.getTitle());
         product.setLive(productDto.isLive());
@@ -65,7 +67,7 @@ public class ProductServiceImp implements ProductService {
     @Override
     public void deleteProduct(String productId) {
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new ResourceNotFoundException("Product not found !!!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found !!!"));
         String fullImagePath = imageUploadPath + product.getProductImage();
         try {
             Path path = Paths.get(fullImagePath);
@@ -83,19 +85,19 @@ public class ProductServiceImp implements ProductService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         List<Product> productList = productRepository.findAll(pageable).toList();
         List<ProductDto> productDtoList =
-            productList
-                .stream()
-                .map(
-                    product -> modelMapper.map(product, ProductDto.class)
-                )
-                .collect(Collectors.toList());
+                productList
+                        .stream()
+                        .map(
+                                product -> modelMapper.map(product, ProductDto.class)
+                        )
+                        .collect(Collectors.toList());
         return productDtoList;
     }
 
     @Override
     public ProductDto getProduct(String productId) {
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new ResourceNotFoundException("Product not found !!!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found !!!"));
         return modelMapper.map(product, ProductDto.class);
     }
 
@@ -105,10 +107,10 @@ public class ProductServiceImp implements ProductService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         List<Product> productList = productRepository.findByLiveTrue(pageable).toList();
         List<ProductDto> productDtoList =
-            productList
-                .stream()
-                .map(product -> modelMapper.map(product, ProductDto.class))
-                .collect(Collectors.toList());
+                productList
+                        .stream()
+                        .map(product -> modelMapper.map(product, ProductDto.class))
+                        .collect(Collectors.toList());
         return productDtoList;
     }
 
@@ -118,10 +120,10 @@ public class ProductServiceImp implements ProductService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         List<Product> productList = productRepository.findByStockTrue(pageable).toList();
         List<ProductDto> productDtoList =
-            productList
-                .stream()
-                .map(product -> modelMapper.map(product, ProductDto.class))
-                .collect(Collectors.toList());
+                productList
+                        .stream()
+                        .map(product -> modelMapper.map(product, ProductDto.class))
+                        .collect(Collectors.toList());
         return productDtoList;
     }
 
@@ -129,17 +131,17 @@ public class ProductServiceImp implements ProductService {
     public List<ProductDto> searchProduct(String keyword) {
         List<Product> productList = productRepository.findByTitleContaining(keyword);
         List<ProductDto> productDtoList =
-            productList
-                .stream()
-                .map(product -> modelMapper.map(product, ProductDto.class))
-                .collect(Collectors.toList());
+                productList
+                        .stream()
+                        .map(product -> modelMapper.map(product, ProductDto.class))
+                        .collect(Collectors.toList());
         return productDtoList;
     }
 
     @Override
     public ProductDto createProductWithCategory(String categoryId, ProductDto productDto) {
         Category category = categoryRepository.findById(categoryId)
-            .orElseThrow(() -> new ResourceNotFoundException("Category not found !!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found !!"));
         String productId = UUID.randomUUID().toString();
         productDto.setProductId(productId);
         productDto.setAddedDate(new Date());
@@ -151,9 +153,9 @@ public class ProductServiceImp implements ProductService {
     @Override
     public ProductDto updateProductCategory(String productId, String categoryId) {
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new ResourceNotFoundException("Product not found !!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found !!"));
         Category category = categoryRepository.findById(categoryId)
-            .orElseThrow(() -> new ResourceNotFoundException("Category not found !!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found !!"));
         product.setCategory(category);
         Product updatedProduct = productRepository.save(product);
         return modelMapper.map(updatedProduct, ProductDto.class);
@@ -162,15 +164,15 @@ public class ProductServiceImp implements ProductService {
     @Override
     public List<ProductDto> getAllProductOfCategory(String categoryId, int pageNumber, int pageSize, String sortBy, String sortDir) {
         Category category = categoryRepository.findById(categoryId)
-            .orElseThrow(() -> new ResourceNotFoundException("Category not found !!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found !!"));
         Sort sort = sortDir.equals("ASC") ? Sort.by(sortBy) : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         List<Product> productList = productRepository.findByCategory(category, pageable).toList();
         List<ProductDto> productDtoList =
-            productList
-                .stream()
-                .map(product -> modelMapper.map(product, ProductDto.class))
-                .collect(Collectors.toList());
+                productList
+                        .stream()
+                        .map(product -> modelMapper.map(product, ProductDto.class))
+                        .collect(Collectors.toList());
         return productDtoList;
     }
 }

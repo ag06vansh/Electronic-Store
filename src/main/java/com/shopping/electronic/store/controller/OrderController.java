@@ -4,7 +4,9 @@ import com.shopping.electronic.store.dto.CreateOrderRequest;
 import com.shopping.electronic.store.dto.OrderDto;
 import com.shopping.electronic.store.service.OrderService;
 import com.shopping.electronic.store.util.ApiResponse;
+
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,10 +36,10 @@ public class OrderController {
     public ResponseEntity<ApiResponse> removeOrder(@PathVariable String orderId) {
         orderService.removeOrder(orderId);
         ApiResponse apiResponse = ApiResponse.builder()
-            .success(true)
-            .status(HttpStatus.OK)
-            .message("Order Removed Successfully !!!")
-            .build();
+                .success(true)
+                .status(HttpStatus.OK)
+                .message("Order Removed Successfully !!!")
+                .build();
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 

@@ -1,6 +1,7 @@
 package com.shopping.electronic.store.model;
 
 import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

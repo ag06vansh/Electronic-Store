@@ -34,10 +34,10 @@ public class CartController {
                                                           @PathVariable int itemId) {
         cartService.removeItemFromCart(userId, itemId);
         ApiResponse apiResponse = ApiResponse.builder()
-            .message("Item is removed !!!")
-            .success(true)
-            .status(HttpStatus.OK)
-            .build();
+                .message("Item is removed !!!")
+                .success(true)
+                .status(HttpStatus.OK)
+                .build();
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
@@ -45,10 +45,10 @@ public class CartController {
     public ResponseEntity<ApiResponse> clearCart(@PathVariable String userId) {
         cartService.clearCart(userId);
         ApiResponse apiResponse = ApiResponse.builder()
-            .message("Cart Reset !!!")
-            .success(true)
-            .status(HttpStatus.OK)
-            .build();
+                .message("Cart Reset !!!")
+                .success(true)
+                .status(HttpStatus.OK)
+                .build();
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 

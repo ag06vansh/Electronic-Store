@@ -4,6 +4,7 @@ import com.shopping.electronic.store.dto.CategoryDto;
 import com.shopping.electronic.store.exception.ResourceNotFoundException;
 import com.shopping.electronic.store.model.Category;
 import com.shopping.electronic.store.repository.CategoryRepository;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +45,7 @@ public class CategoryServiceImp implements CategoryService {
     @Override
     public CategoryDto updateCategory(String categoryId, CategoryDto categoryDto) {
         Category category = categoryRepository.findById(categoryId)
-            .orElseThrow(() -> new ResourceNotFoundException("Category Not Found !!!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category Not Found !!!"));
         category.setDescription(categoryDto.getDescription());
         category.setTitle(categoryDto.getTitle());
         category.setCoverImage(categoryDto.getCoverImage());
@@ -54,7 +56,7 @@ public class CategoryServiceImp implements CategoryService {
     @Override
     public void deleteCategory(String categoryId) {
         Category category = categoryRepository.findById(categoryId)
-            .orElseThrow(() -> new ResourceNotFoundException("Category Not Found !!!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category Not Found !!!"));
         String fullImagePath = imageUploadPath + category.getCoverImage();
         try {
             Path path = Paths.get(fullImagePath);
@@ -73,19 +75,19 @@ public class CategoryServiceImp implements CategoryService {
         Page<Category> page = categoryRepository.findAll(pageable);
         List<Category> categoryList = page.toList();
         List<CategoryDto> categoryDtoList =
-            categoryList
-                .stream()
-                .map(
-                    category -> modelMapper.map(category, CategoryDto.class)
-                )
-                .collect(Collectors.toList());
+                categoryList
+                        .stream()
+                        .map(
+                                category -> modelMapper.map(category, CategoryDto.class)
+                        )
+                        .collect(Collectors.toList());
         return categoryDtoList;
     }
 
     @Override
     public CategoryDto getCategory(String categoryId) {
         Category category = categoryRepository.findById(categoryId)
-            .orElseThrow(() -> new ResourceNotFoundException("Category Not Found !!!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category Not Found !!!"));
         return modelMapper.map(category, CategoryDto.class);
     }
 
@@ -93,12 +95,12 @@ public class CategoryServiceImp implements CategoryService {
     public List<CategoryDto> searchCategory(String keyword) {
         List<Category> categoryList = categoryRepository.findByTitleContaining(keyword);
         List<CategoryDto> categoryDtoList =
-            categoryList
-                .stream()
-                .map(
-                    category -> modelMapper.map(category, CategoryDto.class)
-                )
-                .collect(Collectors.toList());
+                categoryList
+                        .stream()
+                        .map(
+                                category -> modelMapper.map(category, CategoryDto.class)
+                        )
+                        .collect(Collectors.toList());
         return categoryDtoList;
     }
 }

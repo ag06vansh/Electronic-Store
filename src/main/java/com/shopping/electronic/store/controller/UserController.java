@@ -5,9 +5,11 @@ import com.shopping.electronic.store.service.FileService;
 import com.shopping.electronic.store.service.UserService;
 import com.shopping.electronic.store.util.ApiResponse;
 import com.shopping.electronic.store.util.ImageResponse;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -56,11 +58,11 @@ public class UserController {
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable(value = "userId") String userId) {
         String response = userService.deleteUser(userId);
         ApiResponse apiResponse = ApiResponse
-            .builder()
-            .message(response)
-            .status(HttpStatus.OK)
-            .success(true)
-            .build();
+                .builder()
+                .message(response)
+                .status(HttpStatus.OK)
+                .success(true)
+                .build();
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
@@ -102,11 +104,11 @@ public class UserController {
         userService.updateUser(userDto, userId);
 
         ImageResponse imageResponse = ImageResponse.builder()
-            .imageName(imageName)
-            .success(true)
-            .message("User Image Uploaded Successfully !")
-            .status(HttpStatus.CREATED)
-            .build();
+                .imageName(imageName)
+                .success(true)
+                .message("User Image Uploaded Successfully !")
+                .status(HttpStatus.CREATED)
+                .build();
         return new ResponseEntity<>(imageResponse, HttpStatus.CREATED);
     }
 

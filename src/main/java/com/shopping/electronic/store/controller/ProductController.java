@@ -5,9 +5,11 @@ import com.shopping.electronic.store.service.FileService;
 import com.shopping.electronic.store.service.ProductService;
 import com.shopping.electronic.store.util.ApiResponse;
 import com.shopping.electronic.store.util.ImageResponse;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -56,12 +58,12 @@ public class ProductController {
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable(name = "productId") String productId) {
         productService.deleteProduct(productId);
         ApiResponse apiResponse =
-            ApiResponse
-                .builder()
-                .status(HttpStatus.OK)
-                .success(true)
-                .message("Product deleted successfully !!!")
-                .build();
+                ApiResponse
+                        .builder()
+                        .status(HttpStatus.OK)
+                        .success(true)
+                        .message("Product deleted successfully !!!")
+                        .build();
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
@@ -114,11 +116,11 @@ public class ProductController {
         productService.updateProduct(productId, productDto);
 
         ImageResponse imageResponse = ImageResponse.builder()
-            .imageName(imageName)
-            .success(true)
-            .message("User Image Uploaded Successfully !")
-            .status(HttpStatus.CREATED)
-            .build();
+                .imageName(imageName)
+                .success(true)
+                .message("User Image Uploaded Successfully !")
+                .status(HttpStatus.CREATED)
+                .build();
         return new ResponseEntity<>(imageResponse, HttpStatus.CREATED);
     }
 

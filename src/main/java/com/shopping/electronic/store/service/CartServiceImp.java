@@ -11,11 +11,13 @@ import com.shopping.electronic.store.repository.CartItemRepository;
 import com.shopping.electronic.store.repository.CartRepository;
 import com.shopping.electronic.store.repository.ProductRepository;
 import com.shopping.electronic.store.repository.UserRepository;
+
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,9 +40,9 @@ public class CartServiceImp implements CartService {
     public CartDto addItemToCart(String userId, AddItemToCartRequest request) {
 
         Product product = productRepository.findById(request.getProductId())
-            .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         Cart cart = cartRepository.findByUser(user);
         if (cart == null) {
@@ -63,11 +65,11 @@ public class CartServiceImp implements CartService {
         //create cart item
         if (!updated.get()) {
             CartItem cartItem = CartItem.builder()
-                .quantity(request.getQuantity())
-                .totalPrice(request.getQuantity() * product.getDiscountedPrice())
-                .cart(cart)
-                .product(product)
-                .build();
+                    .quantity(request.getQuantity())
+                    .totalPrice(request.getQuantity() * product.getDiscountedPrice())
+                    .cart(cart)
+                    .product(product)
+                    .build();
             cart.getItems().add(cartItem);
         }
 
@@ -79,14 +81,14 @@ public class CartServiceImp implements CartService {
     @Override
     public void removeItemFromCart(String userId, int cartItem) {
         CartItem cartItem1 = cartItemRepository.findById(cartItem)
-            .orElseThrow(() -> new ResourceNotFoundException("Cart Item not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cart Item not found"));
         cartItemRepository.delete(cartItem1);
     }
 
     @Override
     public void clearCart(String userId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         Cart cart = cartRepository.findByUser(user);
         cart.getItems().clear();
         cartRepository.save(cart);
@@ -95,7 +97,7 @@ public class CartServiceImp implements CartService {
     @Override
     public CartDto getCartByUser(String userId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         Cart cart = cartRepository.findByUser(user);
         return modelMapper.map(cart, CartDto.class);
     }
