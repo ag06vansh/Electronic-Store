@@ -2,9 +2,10 @@ server:
   port: 9090
 spring:
   datasource:
-    username: postgres
-    url: jdbc:postgresql://localhost:5432/electronic_store
-    password: Gemini#123
+    username: root
+    url: jdbc:mysql://localhost:3306/electronic_store
+    password: Vanya@123
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
@@ -18,10 +19,6 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
-  security:
-    user:
-      name: vansh
-      password: Vanya@123
 # image path config
 user:
   profile:
