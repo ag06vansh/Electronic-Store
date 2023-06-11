@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,10 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
+@Tag(
+        name = "User",
+        description = "operations related to user profile management"
+)
 public class UserController {
 
     @Autowired
@@ -41,21 +47,43 @@ public class UserController {
     @Value("${user.profile.image.path}")
     private String imageUploadPath;
 
+    /**
+     * Method to add new user profile
+     *
+     * @param userDto
+     * @return
+     */
+    @Operation(summary = "add new user profile details")
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody final UserDto userDto) {
         UserDto userDto1 = userService.createUser(userDto);
         return new ResponseEntity<>(userDto1, HttpStatus.OK);
     }
 
+    /**
+     * Method to update user profile details
+     *
+     * @param userId
+     * @param userDto
+     * @return
+     */
+    @Operation(summary = "update user profile details")
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable(value = "userId") String userId,
+    public ResponseEntity<UserDto> updateUser(@PathVariable(value = "userId") final String userId,
                                               @Valid @RequestBody UserDto userDto) {
         UserDto userDto1 = userService.updateUser(userDto, userId);
         return new ResponseEntity<>(userDto1, HttpStatus.OK);
     }
 
+    /**
+     * Method to remove user profile
+     *
+     * @param userId
+     * @return
+     */
+    @Operation(summary = "remove user profile")
     @DeleteMapping("/{userId}")
-    public ResponseEntity<ApiResponse> deleteUser(@PathVariable(value = "userId") String userId) {
+    public ResponseEntity<ApiResponse> deleteUser(@PathVariable(value = "userId") final String userId) {
         String response = userService.deleteUser(userId);
         ApiResponse apiResponse = ApiResponse
                 .builder()
@@ -66,37 +94,77 @@ public class UserController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    /**
+     * Method to fetch all users profile
+     *
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return
+     */
+    @Operation(summary = "fetch all users profile details")
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUser(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
-                                                    @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
-                                                    @RequestParam(value = "sortBy", defaultValue = "name", required = false) String sortBy,
-                                                    @RequestParam(value = "sortDir", defaultValue = "ASC", required = false) String sortDir
+    public ResponseEntity<List<UserDto>> getAllUser(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) final int pageNumber,
+                                                    @RequestParam(value = "pageSize", defaultValue = "10", required = false) final int pageSize,
+                                                    @RequestParam(value = "sortBy", defaultValue = "name", required = false) final String sortBy,
+                                                    @RequestParam(value = "sortDir", defaultValue = "ASC", required = false) final String sortDir
     ) {
         List<UserDto> userDtoList = userService.getAllUser(pageNumber, pageSize, sortBy, sortDir);
         return new ResponseEntity<>(userDtoList, HttpStatus.OK);
     }
 
+    /**
+     * Method to search user profile using userID
+     *
+     * @param userId
+     * @return
+     */
+    @Operation(summary = "search user profile using userId")
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable(value = "userId") String userId) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable(value = "userId") final String userId) {
         UserDto userDto = userService.getUserById(userId);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
+    /**
+     * Method to search user profile using email
+     *
+     * @param email
+     * @return
+     */
+    @Operation(summary = "search user profile using email")
     @GetMapping("/email/{email}")
-    public ResponseEntity<UserDto> getUserByEmail(@PathVariable(value = "email") String email) {
+    public ResponseEntity<UserDto> getUserByEmail(@PathVariable(value = "email") final String email) {
         UserDto userDto = userService.getUserByEmail(email);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
+    /**
+     * Method to search user profile
+     *
+     * @param keyword
+     * @return
+     */
+    @Operation(summary = "search user profile using keyword")
     @GetMapping("/search/{keyword}")
-    public ResponseEntity<List<UserDto>> searchUser(@PathVariable(value = "keyword") String keyword) {
+    public ResponseEntity<List<UserDto>> searchUser(@PathVariable(value = "keyword") final String keyword) {
         List<UserDto> userDtoList = userService.searchUser(keyword);
         return new ResponseEntity<>(userDtoList, HttpStatus.OK);
     }
 
+    /**
+     * Method to upload user profile image
+     *
+     * @param userId
+     * @param image
+     * @return
+     * @throws IOException
+     */
+    @Operation(summary = "upload user profile image")
     @PostMapping("/image/{userId}")
-    public ResponseEntity<ImageResponse> uploadUserImage(@PathVariable("userId") String userId,
-                                                         @RequestParam("userImage") MultipartFile image) throws IOException {
+    public ResponseEntity<ImageResponse> uploadUserImage(@PathVariable("userId") final String userId,
+                                                         @RequestParam("userImage") final MultipartFile image) throws IOException {
         String imageName = fileService.uploadFile(image, imageUploadPath);
         // saving image name with user data
         UserDto userDto = userService.getUserById(userId);
@@ -112,8 +180,16 @@ public class UserController {
         return new ResponseEntity<>(imageResponse, HttpStatus.CREATED);
     }
 
+    /**
+     * Method to fetch user profile image
+     *
+     * @param userId
+     * @param httpServletResponse
+     * @throws IOException
+     */
+    @Operation(summary = "fetch user profile image")
     @GetMapping("/image/{userId}")
-    public void getUserImage(@PathVariable("userId") String userId,
+    public void getUserImage(@PathVariable("userId") final String userId,
                              HttpServletResponse httpServletResponse) throws IOException {
         UserDto userDto = userService.getUserById(userId);
         InputStream image = fileService.getResource(imageUploadPath, userDto.getImageName());

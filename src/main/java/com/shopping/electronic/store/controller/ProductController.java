@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,10 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/products")
+@Tag(
+        name = "Electronic Products",
+        description = "operations related to product management"
+)
 public class ProductController {
 
     @Autowired
@@ -41,21 +47,43 @@ public class ProductController {
     @Value("${product.image.path}")
     private String imageUploadPath;
 
+    /**
+     * Method to add new product
+     *
+     * @param productDto
+     * @return
+     */
+    @Operation(summary = "add new product details")
     @PostMapping
-    public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productDto) {
+    public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody final ProductDto productDto) {
         ProductDto productDto1 = productService.createProduct(productDto);
         return new ResponseEntity<>(productDto1, HttpStatus.CREATED);
     }
 
+    /**
+     * Method to update product details
+     *
+     * @param productId
+     * @param productDto
+     * @return
+     */
+    @Operation(summary = "update product details")
     @PutMapping("/{productId}")
-    public ResponseEntity<ProductDto> updateProduct(@PathVariable(name = "productId") String productId,
-                                                    @Valid @RequestBody ProductDto productDto) {
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable(name = "productId") final String productId,
+                                                    @Valid @RequestBody final ProductDto productDto) {
         ProductDto productDto1 = productService.updateProduct(productId, productDto);
         return new ResponseEntity<>(productDto1, HttpStatus.OK);
     }
 
+    /**
+     * Method to delete product details using productId
+     *
+     * @param productId
+     * @return
+     */
+    @Operation(summary = "delete product details using productId")
     @DeleteMapping("/{productId}")
-    public ResponseEntity<ApiResponse> deleteProduct(@PathVariable(name = "productId") String productId) {
+    public ResponseEntity<ApiResponse> deleteProduct(@PathVariable(name = "productId") final String productId) {
         productService.deleteProduct(productId);
         ApiResponse apiResponse =
                 ApiResponse
@@ -67,48 +95,101 @@ public class ProductController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    /**
+     * Method to fetch all products details
+     *
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return
+     */
+    @Operation(summary = "fetch all products details")
     @GetMapping
-    public ResponseEntity<List<ProductDto>> getAllProduct(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
-                                                          @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
-                                                          @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
-                                                          @RequestParam(value = "sortDir", defaultValue = "ASC", required = false) String sortDir) {
+    public ResponseEntity<List<ProductDto>> getAllProduct(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) final int pageNumber,
+                                                          @RequestParam(value = "pageSize", defaultValue = "10", required = false) final int pageSize,
+                                                          @RequestParam(value = "sortBy", defaultValue = "title", required = false) final String sortBy,
+                                                          @RequestParam(value = "sortDir", defaultValue = "ASC", required = false) final String sortDir) {
         List<ProductDto> productDtoList = productService.getAllProduct(pageNumber, pageSize, sortBy, sortDir);
         return new ResponseEntity<>(productDtoList, HttpStatus.OK);
     }
 
+    /**
+     * Method to fetch product details using productId
+     *
+     * @param productId
+     * @return
+     */
+    @Operation(summary = "fetch product details using productId")
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductDto> getProduct(@PathVariable("productId") String productId) {
+    public ResponseEntity<ProductDto> getProduct(@PathVariable("productId") final String productId) {
         ProductDto productDto = productService.getProduct(productId);
         return new ResponseEntity<>(productDto, HttpStatus.OK);
     }
 
+    /**
+     * Method to fetch all products details which are live
+     *
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return
+     */
+    @Operation(summary = "fetch all products details which are live")
     @GetMapping("/live")
-    public ResponseEntity<List<ProductDto>> getAllLiveProduct(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
-                                                              @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
-                                                              @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
-                                                              @RequestParam(value = "sortDir", defaultValue = "ASC", required = false) String sortDir) {
+    public ResponseEntity<List<ProductDto>> getAllLiveProduct(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) final int pageNumber,
+                                                              @RequestParam(value = "pageSize", defaultValue = "10", required = false) final int pageSize,
+                                                              @RequestParam(value = "sortBy", defaultValue = "title", required = false) final String sortBy,
+                                                              @RequestParam(value = "sortDir", defaultValue = "ASC", required = false) final String sortDir) {
         List<ProductDto> productDtoList = productService.getAllLiveProduct(pageNumber, pageSize, sortBy, sortDir);
         return new ResponseEntity<>(productDtoList, HttpStatus.OK);
     }
 
+    /**
+     * Method to fetch all products details which are in stock
+     *
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return
+     */
+    @Operation(summary = "fetch all products details which are in stock")
     @GetMapping("/stock")
-    public ResponseEntity<List<ProductDto>> getAllStockProduct(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
-                                                               @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
-                                                               @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
-                                                               @RequestParam(value = "sortDir", defaultValue = "ASC", required = false) String sortDir) {
+    public ResponseEntity<List<ProductDto>> getAllStockProduct(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) final int pageNumber,
+                                                               @RequestParam(value = "pageSize", defaultValue = "10", required = false) final int pageSize,
+                                                               @RequestParam(value = "sortBy", defaultValue = "title", required = false) final String sortBy,
+                                                               @RequestParam(value = "sortDir", defaultValue = "ASC", required = false) final String sortDir) {
         List<ProductDto> productDtoList = productService.getAllStockProduct(pageNumber, pageSize, sortBy, sortDir);
         return new ResponseEntity<>(productDtoList, HttpStatus.OK);
     }
 
+    /**
+     * Method to search product using keyword
+     *
+     * @param keyword
+     * @return
+     */
+    @Operation(summary = "search product details user keyword")
     @GetMapping("/search/{keyword}")
-    public ResponseEntity<List<ProductDto>> searchProduct(@PathVariable("keyword") String keyword) {
+    public ResponseEntity<List<ProductDto>> searchProduct(@PathVariable("keyword") final String keyword) {
         List<ProductDto> productDtoList = productService.searchProduct(keyword);
         return new ResponseEntity<>(productDtoList, HttpStatus.OK);
     }
 
+    /**
+     * Method to upload product image
+     *
+     * @param productId
+     * @param image
+     * @return
+     * @throws IOException
+     */
+    @Operation(summary = "upload product image")
     @PostMapping("/image/{productId}")
-    public ResponseEntity<ImageResponse> uploadProductImage(@PathVariable("productId") String productId,
-                                                            @RequestParam("productImage") MultipartFile image) throws IOException {
+    public ResponseEntity<ImageResponse> uploadProductImage(@PathVariable("productId") final String productId,
+                                                            @RequestParam("productImage") final MultipartFile image) throws IOException {
         String imageName = fileService.uploadFile(image, imageUploadPath);
         // saving image name with user data
         ProductDto productDto = productService.getProduct(productId);
@@ -124,8 +205,16 @@ public class ProductController {
         return new ResponseEntity<>(imageResponse, HttpStatus.CREATED);
     }
 
+    /**
+     * Method to fetch product image using productId
+     *
+     * @param productId
+     * @param httpServletResponse
+     * @throws IOException
+     */
+    @Operation(summary = "fetch product image using productId")
     @GetMapping("/image/{productId}")
-    public void getProductImage(@PathVariable("productId") String productId,
+    public void getProductImage(@PathVariable("productId") final String productId,
                                 HttpServletResponse httpServletResponse) throws IOException {
         ProductDto productDto = productService.getProduct(productId);
         InputStream image = fileService.getResource(imageUploadPath, productDto.getProductImage());
