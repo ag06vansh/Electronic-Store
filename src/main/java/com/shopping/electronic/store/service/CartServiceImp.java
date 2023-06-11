@@ -52,8 +52,7 @@ public class CartServiceImp implements CartService {
         }
 
         AtomicBoolean updated = new AtomicBoolean(false);
-        List<CartItem> items = cart.getItems();
-        items = items.stream().map(item -> {
+        cart.getItems().stream().map(item -> {
             if (item.getProduct().getProductId().equals(request.getProductId())) {
                 item.setQuantity(request.getQuantity());
                 item.setTotalPrice(request.getQuantity() * product.getDiscountedPrice());
