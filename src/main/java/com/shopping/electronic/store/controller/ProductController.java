@@ -187,7 +187,7 @@ public class ProductController {
      * @throws IOException
      */
     @Operation(summary = "upload product image")
-    @PostMapping("/image/{productId}")
+    @PostMapping(value = "/image/{productId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ImageResponse> uploadProductImage(@PathVariable("productId") final String productId,
                                                             @RequestParam("productImage") final MultipartFile image) throws IOException {
         String imageName = fileService.uploadFile(image, imageUploadPath);
@@ -213,7 +213,7 @@ public class ProductController {
      * @throws IOException
      */
     @Operation(summary = "fetch product image using productId")
-    @GetMapping("/image/{productId}")
+    @GetMapping(value = "/image/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public void getProductImage(@PathVariable("productId") final String productId,
                                 HttpServletResponse httpServletResponse) throws IOException {
         ProductDto productDto = productService.getProduct(productId);

@@ -53,7 +53,7 @@ public class UserController {
      * @param userDto
      * @return
      */
-    @Operation(summary = "add new user profile details")
+    @Operation(summary = "add new user")
     @PostMapping
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody final UserDto userDto) {
         UserDto userDto1 = userService.createUser(userDto);
@@ -67,7 +67,7 @@ public class UserController {
      * @param userDto
      * @return
      */
-    @Operation(summary = "update user profile details")
+    @Operation(summary = "update user")
     @PutMapping("/{userId}")
     public ResponseEntity<UserDto> updateUser(@PathVariable(value = "userId") final String userId,
                                               @Valid @RequestBody UserDto userDto) {
@@ -81,7 +81,7 @@ public class UserController {
      * @param userId
      * @return
      */
-    @Operation(summary = "remove user profile")
+    @Operation(summary = "remove user")
     @DeleteMapping("/{userId}")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable(value = "userId") final String userId) {
         String response = userService.deleteUser(userId);
@@ -103,7 +103,7 @@ public class UserController {
      * @param sortDir
      * @return
      */
-    @Operation(summary = "fetch all users profile details")
+    @Operation(summary = "get all users")
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllUser(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) final int pageNumber,
                                                     @RequestParam(value = "pageSize", defaultValue = "10", required = false) final int pageSize,
@@ -120,7 +120,7 @@ public class UserController {
      * @param userId
      * @return
      */
-    @Operation(summary = "search user profile using userId")
+    @Operation(summary = "search user by userId")
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable(value = "userId") final String userId) {
         UserDto userDto = userService.getUserById(userId);
@@ -133,7 +133,7 @@ public class UserController {
      * @param email
      * @return
      */
-    @Operation(summary = "search user profile using email")
+    @Operation(summary = "search user by email")
     @GetMapping("/email/{email}")
     public ResponseEntity<UserDto> getUserByEmail(@PathVariable(value = "email") final String email) {
         UserDto userDto = userService.getUserByEmail(email);
@@ -146,7 +146,7 @@ public class UserController {
      * @param keyword
      * @return
      */
-    @Operation(summary = "search user profile using keyword")
+    @Operation(summary = "search user by any keyword")
     @GetMapping("/search/{keyword}")
     public ResponseEntity<List<UserDto>> searchUser(@PathVariable(value = "keyword") final String keyword) {
         List<UserDto> userDtoList = userService.searchUser(keyword);
@@ -161,8 +161,8 @@ public class UserController {
      * @return
      * @throws IOException
      */
-    @Operation(summary = "upload user profile image")
-    @PostMapping("/image/{userId}")
+    @Operation(summary = "upload user image")
+    @PostMapping(value = "/image/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ImageResponse> uploadUserImage(@PathVariable("userId") final String userId,
                                                          @RequestParam("userImage") final MultipartFile image) throws IOException {
         String imageName = fileService.uploadFile(image, imageUploadPath);
@@ -187,8 +187,8 @@ public class UserController {
      * @param httpServletResponse
      * @throws IOException
      */
-    @Operation(summary = "fetch user profile image")
-    @GetMapping("/image/{userId}")
+    @Operation(summary = "get user image")
+    @GetMapping(value = "/image/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public void getUserImage(@PathVariable("userId") final String userId,
                              HttpServletResponse httpServletResponse) throws IOException {
         UserDto userDto = userService.getUserById(userId);

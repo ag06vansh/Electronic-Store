@@ -157,7 +157,7 @@ public class CategoryController {
      * @throws IOException
      */
     @Operation(summary = "upload product category image")
-    @PostMapping("/image/{categoryId}")
+    @PostMapping(value = "/image/{categoryId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ImageResponse> uploadCategoryImage(@PathVariable("categoryId") final String categoryId,
                                                              @RequestPart("categoryImage") final MultipartFile file) throws IOException {
         String imageName = fileService.uploadFile(file, imageUploadPath);
@@ -183,7 +183,7 @@ public class CategoryController {
      * @throws IOException
      */
     @Operation(summary = "fetch product category image using categoryID")
-    @GetMapping("/image/{categoryId}")
+    @GetMapping(value = "/image/{categoryId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public void getCategoryImage(@PathVariable("categoryId") final String categoryId,
                                  HttpServletResponse httpServletResponse) throws IOException {
         CategoryDto categoryDto = categoryService.getCategory(categoryId);
